@@ -13,6 +13,11 @@ else()
     add_compile_options(-Wall -Wextra -Werror) # Strict warnings for GCC/Clang (Linux/Mac)
 endif()
 
+set(PIPELINE
+    src/pipeline/pipeline.h
+    src/pipeline/pipeline.cpp
+)
+
 set(CHUNKER
     src/chunker/chunker.h
     src/chunker/chunker.cpp
@@ -40,6 +45,7 @@ add_library(lint_core
     ${UTILS}
     ${RULES}
     ${CHUNKER}
+    ${PIPELINE}
 )
 
 target_include_directories(lint_core PUBLIC src)

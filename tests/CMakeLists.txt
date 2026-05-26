@@ -10,6 +10,10 @@ FetchContent_MakeAvailable(Catch2)
 
 # Create the test runner executable
 
+set(PIPELINE
+  pipeline/pipeline_test.cpp
+)
+
 set(CHUNKER
   chunker/chunker_test.cpp
 )
@@ -28,6 +32,7 @@ add_executable(tests
     ${RULES}
     ${UTIL}
     ${CHUNKER}
+    ${PIPELINE}
 )
 
 # Link the test runner to Catch2 and YOUR core library
