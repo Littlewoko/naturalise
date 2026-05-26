@@ -13,10 +13,25 @@ else()
     add_compile_options(-Wall -Wextra -Werror) # Strict warnings for GCC/Clang (Linux/Mac)
 endif()
 
-# 1. Core library holding your validation logic
-add_library(lint_core
+set(UTILS
+    src/utils/types.h
+)
+
+set(RULES
+    src/rules/base_rule.h
+    src/rules/comment_rule.h
+    src/rules/comment_rule.cpp
+)
+
+set(PARSER
     src/parser/natural_parser.cpp
     src/parser/natural_parser.h
+)
+
+add_library(lint_core
+    ${PARSER}
+    ${UTILS}
+    ${RULES}
 )
 target_include_directories(lint_core PUBLIC src)
 
