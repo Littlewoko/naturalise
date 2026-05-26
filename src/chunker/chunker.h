@@ -17,5 +17,5 @@ private:
         ReadingComment,
     };
 
-    void emit_chunk(vector<Chunk> &chunk, ParserState type, int start_line, vector<string> &buffer);
+    void emit_chunk(vector<Chunk> &chunk, ChunkType type, int start_line, vector<string> &buffer);
 };

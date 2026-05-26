@@ -13,6 +13,11 @@ else()
     add_compile_options(-Wall -Wextra -Werror) # Strict warnings for GCC/Clang (Linux/Mac)
 endif()
 
+set(CHUNKER
+    src/chunker/chunker.h
+    src/chunker/chunker.cpp
+)
+
 set(UTILS
     src/utils/types.h
 )
@@ -34,7 +39,9 @@ add_library(lint_core
     ${PARSER}
     ${UTILS}
     ${RULES}
+    ${CHUNKER}
 )
+
 target_include_directories(lint_core PUBLIC src)
 
 # 2. The main command-line utility
