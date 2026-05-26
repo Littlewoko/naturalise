@@ -9,7 +9,13 @@ enum class ChunkType {
     Other
 };
 
+enum class ViolationLevel {
+    WARN,
+    ERROR
+};
+
 struct Violation {
+    ViolationLevel level;
     int line_number;
     string message;
 };

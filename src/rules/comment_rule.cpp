@@ -4,6 +4,7 @@ namespace {
     void check_comment_start(int line_number, const string &line, vector<Violation> &violations) {
         if (line.empty() || line[0] != '*') {
             Violation violation;
+            violation.level = ViolationLevel::WARN;
             violation.line_number = line_number;
             violation.message = "comment line must begin with *";
 

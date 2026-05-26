@@ -52,6 +52,7 @@ TEST_CASE("Comment Line Validator") {
         rule.validate(chunk, res);
 
         REQUIRE(res.size() == 1);
+        REQUIRE(res[0].level == ViolationLevel::WARN);
         REQUIRE(res[0].line_number == 50);
         REQUIRE_THAT(res[0].message, Catch::Matchers::ContainsSubstring("must begin with *"));}
 }
