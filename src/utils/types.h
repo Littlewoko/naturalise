@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -13,6 +14,22 @@ enum class ViolationLevel {
     WARN,
     ERROR
 };
+
+inline ostream& operator<<(ostream &os, const ViolationLevel &level) {
+    switch (level) {
+        case ViolationLevel::WARN:
+            os << "WARN";
+            break;
+        case ViolationLevel::ERROR:
+            os << "ERROR";
+            break;
+        default:
+            os << "UNKNOWN";
+            break;
+    }
+
+    return os;
+}
 
 struct Violation {
     ViolationLevel level;

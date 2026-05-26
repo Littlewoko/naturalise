@@ -3,19 +3,16 @@
 using namespace std;
 
 bool Chunker::update_state(ParserState &state, string &line) {
-    cout << line << endl;
     if (line.empty() || (line[0] == '*' || line.find_first_not_of(" \t\v\f") == string::npos)) {
         // line is empty, starts with a * or is only whitespace
 
         if (state != ParserState::ReadingComment) {
-            cout << "switching to comment" << endl;
             state = ParserState::ReadingComment;
             return true;
         }
     } else {
         // everything else
         if (state != ParserState::ReadingOther) {
-            cout << "switching to other" << endl;
             state = ParserState::ReadingOther;
             return true;
         }
