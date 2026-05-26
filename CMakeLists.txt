@@ -21,6 +21,8 @@ set(RULES
     src/rules/base_rule.h
     src/rules/comment_rule.h
     src/rules/comment_rule.cpp
+    src/rules/line_rule.h
+    src/rules/line_rule.cpp
 )
 
 set(PARSER

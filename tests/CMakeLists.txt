@@ -11,6 +11,7 @@ FetchContent_MakeAvailable(Catch2)
 # Create the test runner executable
 set(RULES
   rules/comment_rule_test.cpp
+  rules/line_rule_test.cpp
 )
 
 add_executable(tests 
