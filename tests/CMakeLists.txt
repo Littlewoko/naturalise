@@ -9,8 +9,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Catch2)
 
 # Create the test runner executable
+set(RULES
+  rules/comment_rule_test.cpp
+)
+
 add_executable(tests 
     unit/natural_parser_test.cpp
+    ${RULES}
 )
 
 # Link the test runner to Catch2 and YOUR core library
