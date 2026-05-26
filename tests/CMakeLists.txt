@@ -14,13 +14,19 @@ set(RULES
   rules/line_rule_test.cpp
 )
 
+set(UTIL
+  util/test_helper.h
+)
+
 add_executable(tests 
     unit/natural_parser_test.cpp
     ${RULES}
+    ${UTIL}
 )
 
 # Link the test runner to Catch2 and YOUR core library
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain lint_core)
+target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Register the executable with CMake's test runner (CTest)
 include(Catch)

@@ -2,23 +2,12 @@
 #include <catch2/matchers/catch_matchers_string.hpp>
 #include "rules/line_rule.h"
 #include <string>
+#include "util/test_helper.h"
 
 using namespace std;
 
 const string _trailing_whitespace_warning = "line should not contain trailing whitespace";
 const string _over_length_line = "line should not be greater than 80 characters";
-
-auto has_violation = [](const vector<Violation> &violations, int line, const string &message, ViolationLevel level) {
-    for (auto const &v: violations) {
-        if (v.level == level 
-        && v.line_number == line
-        && (v.message.find(message) != string::npos)) {
-            return true;
-        }
-    }
-
-    return false;
-};
 
 TEST_CASE("Line Validator") {
     LineRule rule;
@@ -58,7 +47,10 @@ TEST_CASE("Line Validator") {
 
         rule.validate(chunk, res);
 
-        bool has_trailing_whitespace = has_violation(res, chunk.starting_line, _trailing_whitespace_warning, ViolationLevel::WARN);
+        bool has_trailing_whitespace = TestUtil::has_violation(res, 
+            chunk.starting_line, 
+            _trailing_whitespace_warning, 
+            ViolationLevel::WARN);
 
         REQUIRE(has_trailing_whitespace == true);    
     }
@@ -75,7 +67,10 @@ TEST_CASE("Line Validator") {
 
         rule.validate(chunk, res);
 
-        bool has_trailing_whitespace = has_violation(res, chunk.starting_line, _trailing_whitespace_warning, ViolationLevel::WARN);
+        bool has_trailing_whitespace = TestUtil::has_violation(res, 
+            chunk.starting_line, 
+            _trailing_whitespace_warning, 
+            ViolationLevel::WARN);
 
         REQUIRE(has_trailing_whitespace == true);      
     }
@@ -93,7 +88,10 @@ TEST_CASE("Line Validator") {
 
         rule.validate(chunk, res);
 
-        bool has_over_length_line = has_violation(res, chunk.starting_line, _over_length_line, ViolationLevel::WARN);
+        bool has_over_length_line = TestUtil::has_violation(res, 
+            chunk.starting_line, 
+            _over_length_line, 
+            ViolationLevel::WARN);
 
         REQUIRE(has_over_length_line == true); 
     }
@@ -127,8 +125,14 @@ TEST_CASE("Line Validator") {
 
         rule.validate(chunk, res);
 
-        bool has_trailing_whitespace = has_violation(res, chunk.starting_line, _trailing_whitespace_warning, ViolationLevel::WARN);
-        bool is_too_long = has_violation(res, chunk.starting_line, _over_length_line, ViolationLevel::WARN);
+        bool has_trailing_whitespace = TestUtil::has_violation(res, 
+            chunk.starting_line, 
+            _trailing_whitespace_warning, 
+            ViolationLevel::WARN);
+        bool is_too_long = TestUtil::has_violation(res, 
+            chunk.starting_line, 
+            _over_length_line, 
+            ViolationLevel::WARN);
 
         REQUIRE(has_trailing_whitespace == true);    
         REQUIRE(is_too_long == true);

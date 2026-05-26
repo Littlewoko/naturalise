@@ -2,22 +2,11 @@
 #include <catch2/matchers/catch_matchers_string.hpp>
 #include "rules/comment_rule.h"
 #include <string>
+#include "util/test_helper.h"
 
 using namespace std;
 
 const string _asterisk_warning = "line should begin with *";
-
-auto has_violation = [](const vector<Violation> &violations, int line, const string &message, ViolationLevel level) {
-    for (auto const &v: violations) {
-        if (v.level == level 
-        && v.line_number == line
-        && (v.message.find(message) != string::npos)) {
-            return true;
-        }
-    }
-
-    return false;
-};
 
 TEST_CASE("Comment Line Validator") {
     CommentRule rule;
@@ -65,7 +54,10 @@ TEST_CASE("Comment Line Validator") {
 
         rule.validate(chunk, res);
 
-        bool has_no_asterix = has_violation(res, chunk.starting_line, _asterisk_warning, ViolationLevel::WARN);
+        bool has_no_asterix = TestUtil::has_violation(res, 
+            chunk.starting_line, 
+            _asterisk_warning, 
+            ViolationLevel::WARN);
 
         REQUIRE(has_no_asterix == true);     
     }
@@ -82,7 +74,10 @@ TEST_CASE("Comment Line Validator") {
 
         rule.validate(chunk, res);
 
-        bool has_no_asterix = has_violation(res, chunk.starting_line, _asterisk_warning, ViolationLevel::WARN);
+        bool has_no_asterix = TestUtil::has_violation(res, 
+            chunk.starting_line, 
+            _asterisk_warning, 
+            ViolationLevel::WARN);
 
         REQUIRE(has_no_asterix == true);     
     }
@@ -99,7 +94,10 @@ TEST_CASE("Comment Line Validator") {
 
         rule.validate(chunk, res);
 
-        bool has_no_asterix = has_violation(res, chunk.starting_line, _asterisk_warning, ViolationLevel::WARN);
+        bool has_no_asterix = TestUtil::has_violation(res, 
+            chunk.starting_line, 
+            _asterisk_warning, 
+            ViolationLevel::WARN);
 
         REQUIRE(has_no_asterix == true);   
     }
@@ -118,7 +116,10 @@ TEST_CASE("Comment Line Validator") {
 
         rule.validate(chunk, res);
 
-        bool has_no_asterix = has_violation(res, chunk.starting_line, _asterisk_warning, ViolationLevel::WARN);
+        bool has_no_asterix = TestUtil::has_violation(res, 
+            chunk.starting_line, 
+            _asterisk_warning, 
+            ViolationLevel::WARN);
 
         REQUIRE(has_no_asterix == true);   
     }
