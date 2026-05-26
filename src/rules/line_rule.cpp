@@ -2,7 +2,9 @@
 
 namespace {
     void check_trailing_whitespace(int line_number, const string &line, vector<Violation> &violations) {
-        if (!line.empty() && line.back() == ' ') {
+        if (line.empty()) return;
+
+        if (isspace(static_cast<unsigned char>(line.back()))) {
             Violation violation;
             violation.level = ViolationLevel::WARN;
             violation.line_number = line_number;

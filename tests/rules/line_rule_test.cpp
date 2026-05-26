@@ -55,8 +55,8 @@ TEST_CASE("Line Validator") {
         REQUIRE(has_trailing_whitespace == true);    
     }
 
-    SECTION("INVALID: trailing whitespace") {
-        vector<string> lines {"ABC "};
+    SECTION("INVALID: trailing tab") {
+        vector<string> lines {"ABC \t"};
 
         Chunk chunk;
         chunk.starting_line = 30;
@@ -73,6 +73,45 @@ TEST_CASE("Line Validator") {
             ViolationLevel::WARN);
 
         REQUIRE(has_trailing_whitespace == true);      
+    }
+
+    SECTION("INVALID: trailing whitespace check") {
+        struct WhitespaceCase {
+            string label;
+            char character;
+        };
+
+        vector<WhitespaceCase> cases = {
+            {"space", ' '},
+            {"h tab", '\t'},
+            {"v tab", '\v'},
+            {"form feed", '\f'}
+        };
+
+        for (const auto &c: cases) {
+            DYNAMIC_SECTION("test trailing " << c.label) {
+                string line = "ABC";
+                line.push_back(c.character);
+
+                vector<string> lines {line};
+
+                Chunk chunk;
+                chunk.starting_line = 30;
+                chunk.type = ChunkType::CommentBlock;
+                chunk.lines = lines;
+
+                vector<Violation> res;
+
+                rule.validate(chunk, res);
+
+                bool has_trailing_whitespace = TestUtil::has_violation(res, 
+                    chunk.starting_line, 
+                    _trailing_whitespace_warning, 
+                    ViolationLevel::WARN);
+
+                REQUIRE(has_trailing_whitespace == true);    
+            }
+        }
     }
 
     SECTION("INVALID: over length") {
