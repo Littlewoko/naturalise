@@ -29,4 +29,25 @@ TEST_CASE("Chunker state machine") {
         REQUIRE(res[0].lines.size() == 2);
         REQUIRE(res[0].lines[0] == "* first line"); // retain order
     }
+
+    SECTION("Separates multiple blocks") {
+        stringstream input;
+        input << "\n";
+        input << "* hello, world\n";
+        input << "RETURN 123";
+        input << "* yahoo";
+
+        vector<Chunk> res = chunker.chunk(input);
+
+        REQUIRE(res.size() == 3);
+
+        REQUIRE(res[0].type == ChunkType::CommentBlock);
+        REQUIRE(res[0].starting_line == 1);
+
+        REQUIRE(res[1].type == ChunkType::Other);
+        REQUIRE(res[1].starting_line == 3);
+
+        REQUIRE(res[2].type == ChunkType::CommentBlock);
+        REQUIRE(res[2].starting_line == 4);
+    }
 }

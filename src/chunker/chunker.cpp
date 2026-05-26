@@ -2,6 +2,25 @@
 
 using namespace std;
 
+bool Chunker::update_state(ParserState &state, string &line) {
+    if (line.empty() || (line[0] == '*' || line.find_first_not_of(" \t\v\f") != string::npos)) {
+        // line is empty, starts with a * or is only whitespace
+
+        if (state != ParserState::ReadingComment) {
+            state = ParserState::ReadingComment;
+            return true;
+        }
+    } else {
+        // everything else
+        if (state != ParserState::ReadingOther) {
+            state = ParserState::ReadingOther;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Chunker::emit_chunk(vector<Chunk> &chunks, ChunkType type, int start_line, vector<string> &buffer) {
     if (buffer.empty()) return;
     
@@ -14,15 +33,27 @@ void Chunker::emit_chunk(vector<Chunk> &chunks, ChunkType type, int start_line, 
 }
 
 vector<Chunk> Chunker::chunk(istream &input_stream) {
+    ParserState state;
+
     vector<string> buffer;
     vector<Chunk> res;
     
+    int line_number = 1;
     string line;
     while(getline(input_stream, line)) {
+        ParserState prevState = state;
+        bool updated = update_state(state, line);
+        if (updated) {
+            ChunkType type = prevState == ParserState::ReadingComment ? ChunkType::CommentBlock : ChunkType::Other;
+            int starting_linenumber = line_number;
+
+            line_number += buffer.size();
+
+            emit_chunk(res, type, starting_linenumber, buffer);
+        }
+
         buffer.push_back(line);
     }
-
-    emit_chunk(res, ChunkType::CommentBlock, 1, buffer);
 
     return res;
 }

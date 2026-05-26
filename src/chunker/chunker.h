@@ -15,7 +15,9 @@ public:
 private:
     enum class ParserState {
         ReadingComment,
+        ReadingOther
     };
 
+    bool update_state(ParserState &state, string &line);
     void emit_chunk(vector<Chunk> &chunk, ChunkType type, int start_line, vector<string> &buffer);
 };
