@@ -13,7 +13,7 @@ auto has_violation = [](const vector<Violation> &violations, int line, const str
     for (auto const &v: violations) {
         if (v.level == level 
         && v.line_number == line
-        && v.message.find(message)) {
+        && (v.message.find(message) != string::npos)) {
             return true;
         }
     }
