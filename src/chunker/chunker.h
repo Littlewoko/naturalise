@@ -14,6 +14,7 @@ public:
 
 private:
     enum class ParserState {
+        Initial,
         ReadingComment,
         ReadingOther
     };

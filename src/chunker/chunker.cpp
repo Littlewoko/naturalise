@@ -3,16 +3,19 @@
 using namespace std;
 
 bool Chunker::update_state(ParserState &state, string &line) {
-    if (line.empty() || (line[0] == '*' || line.find_first_not_of(" \t\v\f") != string::npos)) {
+    cout << line << endl;
+    if (line.empty() || (line[0] == '*' || line.find_first_not_of(" \t\v\f") == string::npos)) {
         // line is empty, starts with a * or is only whitespace
 
         if (state != ParserState::ReadingComment) {
+            cout << "switching to comment" << endl;
             state = ParserState::ReadingComment;
             return true;
         }
     } else {
         // everything else
         if (state != ParserState::ReadingOther) {
+            cout << "switching to other" << endl;
             state = ParserState::ReadingOther;
             return true;
         }
@@ -33,7 +36,7 @@ void Chunker::emit_chunk(vector<Chunk> &chunks, ChunkType type, int start_line, 
 }
 
 vector<Chunk> Chunker::chunk(istream &input_stream) {
-    ParserState state;
+    ParserState state = ParserState::Initial;
 
     vector<string> buffer;
     vector<Chunk> res;
@@ -43,6 +46,7 @@ vector<Chunk> Chunker::chunk(istream &input_stream) {
     while(getline(input_stream, line)) {
         ParserState prevState = state;
         bool updated = update_state(state, line);
+
         if (updated) {
             ChunkType type = prevState == ParserState::ReadingComment ? ChunkType::CommentBlock : ChunkType::Other;
             int starting_linenumber = line_number;
@@ -53,6 +57,11 @@ vector<Chunk> Chunker::chunk(istream &input_stream) {
         }
 
         buffer.push_back(line);
+    }
+
+    if (state != ParserState::Initial) { // entered the loop
+        ChunkType type = state == ParserState::ReadingComment ? ChunkType::CommentBlock : ChunkType::Other;
+        emit_chunk(res, type, line_number, buffer);
     }
 
     return res;

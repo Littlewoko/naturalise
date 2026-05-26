@@ -34,7 +34,7 @@ TEST_CASE("Chunker state machine") {
         stringstream input;
         input << "\n";
         input << "* hello, world\n";
-        input << "RETURN 123";
+        input << "RETURN 123\n";
         input << "* yahoo";
 
         vector<Chunk> res = chunker.chunk(input);
